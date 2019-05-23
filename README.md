@@ -10,3 +10,7 @@ Create and configure the file `myConfig.R`.
 ## Usage
 
 Run `main.R`.
+
+## To Do
+
+Run through all AUX files, currently only searches main.aux.
