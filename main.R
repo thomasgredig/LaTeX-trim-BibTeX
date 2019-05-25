@@ -9,7 +9,7 @@ output.file = 'trimmed-bibtex.bib'
 #########################################################
 
 # load all functions, except main.R
-for(q1 in dir(pattern='[^(main)].*\\.R$')) { source(q1)  }
+for(q1 in dir('R', pattern='[^(main)].*\\.R$')) { source(file.path('R',q1)) }
 
 # find the AUX file with the citations
 fn = get.AuxFile(path.source)

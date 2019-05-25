@@ -1,12 +1,19 @@
-get.BibliographyList <- function(filename) {
-  d = read.table(filename, stringsAsFactors = FALSE, header=FALSE)
-  n = grep('bibdata',d$V1)
-  l = gsub('\\\\bibdata\\{','',d$V1[n])
-  l = gsub('\\}$','',l)
-  if (length(l)<1) {
-    warning("No bibliography file found")
+# search the AUX files for a bibdata file
+get.BibliographyList <- function(file.list) {
+  bib.list = c()
+  for(filename in file.list) {
+    d = readLines(filename)
+    n = grep('bibdata',d)
+    l = gsub('\\\\bibdata\\{','',d[n])
+    l = gsub('\\}$','',l)
+    if(length(l)>0) {
+      # remove bib extension, if it has it
+      l = gsub('\\.bib$','',l)
+      bib.list = c(bib.list, paste0(l,'.bib'))
+    }
   }
-  # remove bib extension, if it has it
-  l = gsub('\\.bib$','',l)
-  paste0(l,'.bib')
+  if (length(bib.list)<1) {
+    warning("No bibliography file in aux file found.")
+  }
+  bib.list
 }
