@@ -38,11 +38,13 @@ itemslist <- mapply(
 print(paste("File contains",length(itemslist),"bib entries."))
 # see http://www.bibtex.org/Format/
 
-#itemslist = remove.bibItem('keywords',itemslist)
-itemslist = remove.bibItem('language',itemslist)
 itemslist = remove.bibItem('abstract',itemslist)
+itemslist = remove.bibItem('keywords',itemslist)
+itemslist = remove.bibItem('language',itemslist)
+itemslist = remove.bibItem('copyright',itemslist)
 itemslist = remove.bibItem('file',itemslist)
 itemslist = remove.bibItem('doi',itemslist)
+itemslist = remove.bibItem('issn',itemslist)
 
 # find all Bibtex Keys
 BibTeXKeys <- lapply(itemslist,
