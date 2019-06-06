@@ -19,6 +19,8 @@ fn = file.path(path.source, fn)
 citation.list = get.CitationList(fn)
 citation.list = tolower(unique(citation.list))
 
+citation.list
+
 # get the bibliography files
 bib.list = get.BibliographyList(fn)
 bibfile = file.path(path.source,bib.list[1])
