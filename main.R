@@ -38,6 +38,11 @@ itemslist <- mapply(
 print(paste("File contains",length(itemslist),"bib entries."))
 # see http://www.bibtex.org/Format/
 
+#itemslist = remove.bibItem('keywords',itemslist)
+itemslist = remove.bibItem('language',itemslist)
+itemslist = remove.bibItem('abstract',itemslist)
+itemslist = remove.bibItem('file',itemslist)
+itemslist = remove.bibItem('doi',itemslist)
 
 # find all Bibtex Keys
 BibTeXKeys <- lapply(itemslist,
@@ -61,6 +66,10 @@ Bib.CitationList <- lapply(citation.list,
             })
 Bib.CitationList = unlist(Bib.CitationList)
 
+
+
 # write new BibTex file that only includes used citations
 t1 = unlist(itemslist[Bib.CitationList])
 writeLines(t1, output.file)
+
+
