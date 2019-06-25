@@ -14,5 +14,7 @@ for(q1 in dir('R', pattern='[^(main)].*\\.R$')) { source(file.path('R',q1)) }
 
 tex.fileList = get.TexFile(path.source)
 
-filename = file.path(path.source, tex.fileList[10])
-convert.Units(filename, 't.tex')
+for(fname in tex.fileList) {
+  filename = file.path(path.source, fname)
+  convert.Units(filename, gsub('.tex','-new.tex', filename))
+}
