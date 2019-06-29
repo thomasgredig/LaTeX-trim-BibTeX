@@ -25,19 +25,11 @@ citation.list
 bib.list = get.BibliographyList(fn)
 bibfile = file.path(path.source,bib.list[1])
 
-# load bibtex file 
-d = readLines(bibfile)
-d <- str_replace_all(d, "[^[:graph:]]", " ")
-from <- which(str_extract(d, "[:graph:]") == "@")
-to  <- c(from[-1] - 1, length(d))
-
 # separate all bib items
-itemslist <- mapply(
-  function(x, y) return(d[x:y]),
-  x = from, y = to - 1,
-  SIMPLIFY = FALSE
-)
+itemslist = getBibData(bibfile)
 print(paste("File contains",length(itemslist),"bib entries."))
+
+
 # see http://www.bibtex.org/Format/
 
 itemslist = remove.bibItem('abstract',itemslist)

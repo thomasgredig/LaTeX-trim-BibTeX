@@ -6,10 +6,13 @@ get.BibliographyList <- function(file.list) {
     n = grep('bibdata',d)
     l = gsub('\\\\bibdata\\{','',d[n])
     l = gsub('\\}$','',l)
-    if(length(l)>0) {
+    l1 = unlist(str_split(l, ','))
+    #if(length(l)>0) {
+    for(l in l1) {
       # remove bib extension, if it has it
       l = gsub('\\.bib$','',l)
       bib.list = c(bib.list, paste0(l,'.bib'))
+      #}
     }
   }
   if (length(bib.list)<1) {
