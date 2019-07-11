@@ -1,4 +1,4 @@
-# converts a bibliography item name
+# converts a bibliography item name into a new format
 #
 
 ######## configuration, overwrite in myConfig.R #########
@@ -11,7 +11,7 @@ library(stringr)
 for(q1 in dir('R', pattern='[^(main)].*\\.R$')) {  source(file.path('R',q1)) }
 
 # find all the bib IDs
-filename = file.path(path.source, input.file)
+filename = file.path(path.source, input.file)  # CHANGE: need to change this to get.TexFile()
 bibIDs = get.AllReferncesFromTeX(filename)
 unique(bibIDs)
 
@@ -23,7 +23,7 @@ fn = file.path(path.source, fn)
 fn = get.BibliographyList(fn)
 fn = global.filePath(path.source,fn)
 
-itemslist = get.BibData(fn[1])
+itemslist = get.BibData(fn[2])  # CHANGE: loop through all
 # clean up
 # see http://www.bibtex.org/Format/
 
@@ -35,9 +35,37 @@ itemslist = remove.bibItem('file',itemslist)
 itemslist = remove.bibItem('doi',itemslist)
 itemslist = remove.bibItem('issn',itemslist)
 
-# guess new Bib ID
+# guess new Bib Key
 years = gsub('\\D','',unlist(get.bibItem('year',itemslist)))
 author.lastname = get.bibLastname(unlist(get.bibItem('author',itemslist)))
 titles = get.firstWord(get.bibItem('title',itemslist))
 
-paste(author.lastname, titles, years, sep='_')
+# these are the desired looking bib Keys
+new.bibIDs = paste(author.lastname, titles, years, sep='_')
+new.bibIDs = gsub("[^[:graph:]]",'',new.bibIDs)  # remove umlaute
+new.bibIDs = gsub('[\\(\\)\\.]','',new.bibIDs)  
+new.bibIDs
+
+ID = 27
+itemslist[ID] -> i7
+get.bibItem('title',i7)
+get.firstWord(unlist(get.bibItem('title',i7)))
+
+# these are the bib Keys from the file.
+# get.bibKey(itemslist[12])
+# get.bibItem('title',itemslist[12]) -> m
+# m
+# unlist(lapply(str_split(m,' '),'[[',1))
+# get.bibLastname(m)
+
+old.bibIDs = unlist(get.bibKey(itemslist))
+old.bibIDs
+
+d = data.frame(
+  oldKeys = old.bibIDs,
+  newKeys = new.bibIDs,
+  equal = (tolower(old.bibIDs) == tolower(new.bibIDs))
+)
+d1 = subset(d, equal==FALSE)
+head(d1,n=15)
+write.csv(d, file.path(path.source,'bib-key-conversion.csv'))

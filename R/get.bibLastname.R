@@ -3,5 +3,5 @@ get.bibLastname <- function(lastnames) {
   ln = unlist(lapply(str_split(lastnames,' '),'[[',1))
   ln2 = gsub('[,\\.]','',ln)
 
-  gsub("\\'",'',iconv(ln2, to='ASCII//TRANSLIT'))
+  gsub("[\\~\\']",'',iconv(ln2, to='ASCII//TRANSLIT'))
 }

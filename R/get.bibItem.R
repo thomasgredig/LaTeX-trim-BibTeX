@@ -7,8 +7,14 @@ get.bibItem <- function(bibItemName, item.list) {
            if(length(n1)==0) { 
              ""
            } else  { 
+             # convert "" to brackets {}
+             gsub('=.*?\\"',"={",x[q1[n1[1]]]) -> q2
+             gsub('\\",','},',q2) -> q2
              # only get the part from the {}
-             gsub('[\\"\\{\\}]','',str_extract(x[q1[n1]], '\\{(.*)\\}'))
+             # sometimes there are multiple lines for authors, so terminate with }
+             gsub('[\\"\\{\\}]','',str_extract(paste0(q2,'}'), '\\{(.*)\\}'))
            }
          })
 }
+
+#gsub('=.*?\\"?',"={","  title = {Interferenz von {{R{\\\"o}ntgenstrahlen}} an D{\\\"u}nnen {{Schichten}}},") 

@@ -69,3 +69,5 @@ for(j in 1:nrow(r)) {
 # save results
 write.csv(r, file = file.path(path.source, OUTPUT.IMAGE))
 
+print(paste("Found",nrow(r),"figures in",length(filelist.tex),"TeX files."))
+print(paste("Output is saved in file: ",file.path(path.source, OUTPUT.IMAGE)))
