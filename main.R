@@ -24,9 +24,9 @@ citation.list
 # get the bibliography files
 bib.list = get.BibliographyList(fn)
 bibfile = file.path(path.source,bib.list[1])
-
+bib.list
 # separate all bib items
-itemslist = getBibData(bibfile)
+itemslist = get.BibData(bibfile)
 print(paste("File contains",length(itemslist),"bib entries."))
 
 
@@ -38,6 +38,7 @@ itemslist = remove.bibItem('language',itemslist)
 itemslist = remove.bibItem('copyright',itemslist)
 itemslist = remove.bibItem('file',itemslist)
 itemslist = remove.bibItem('doi',itemslist)
+itemslist = remove.bibItem('url',itemslist)
 itemslist = remove.bibItem('issn',itemslist)
 
 # find all Bibtex Keys
@@ -58,7 +59,7 @@ PublicationType <- lapply(itemslist,
 
 Bib.CitationList <- lapply(citation.list,
             function(x) {
-              grep(x, BibTeXKeys)
+              grep(x, BibTeXKeys)[1]
             })
 Bib.CitationList = unlist(Bib.CitationList)
 
@@ -67,5 +68,5 @@ Bib.CitationList = unlist(Bib.CitationList)
 # write new BibTex file that only includes used citations
 t1 = unlist(itemslist[Bib.CitationList])
 writeLines(t1, output.file)
-
+output.file
 

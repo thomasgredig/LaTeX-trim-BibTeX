@@ -23,7 +23,7 @@ fn = file.path(path.source, fn)
 fn = get.BibliographyList(fn)
 fn = global.filePath(path.source,fn)
 
-itemslist = get.BibData(fn[2])  # CHANGE: loop through all
+itemslist = get.BibData(fn[1])  # CHANGE: loop through all
 # clean up
 # see http://www.bibtex.org/Format/
 
@@ -46,9 +46,10 @@ new.bibIDs = gsub("[^[:graph:]]",'',new.bibIDs)  # remove umlaute
 new.bibIDs = gsub('[\\(\\)\\.]','',new.bibIDs)  
 new.bibIDs
 
-ID = 27
+ID = 23
 itemslist[ID] -> i7
-get.bibItem('title',i7)
+i7
+get.bibItem('author',i7)
 get.firstWord(unlist(get.bibItem('title',i7)))
 
 # these are the bib Keys from the file.
@@ -66,6 +67,7 @@ d = data.frame(
   newKeys = new.bibIDs,
   equal = (tolower(old.bibIDs) == tolower(new.bibIDs))
 )
-d1 = subset(d, equal==FALSE)
-head(d1,n=15)
+
+d$used = FALSE
+d$used[which(d$oldKeys %in% unique(bibIDs))]=TRUE
 write.csv(d, file.path(path.source,'bib-key-conversion.csv'))
