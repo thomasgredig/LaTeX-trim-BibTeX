@@ -10,6 +10,7 @@
 ######## configuration, overwrite in myConfig.R #########
 path.source = '.'
 OUTPUT.IMAGE = 'figure-summary.csv'
+OUTPUT.IMAGE2 = 'figure-summary2.csv'
 #########################################################
 
 # load all functions, except main.R
@@ -18,6 +19,7 @@ for(q1 in dir('R', pattern='[^(main)].*\\.R$')) {  source(file.path('R',q1)) }
 
 # find all the TeX files
 filelist.tex = get.TexFile(path.source)
+path.source
 r=NULL
 paths=NULL
 
@@ -71,3 +73,34 @@ write.csv(r, file = file.path(path.source, OUTPUT.IMAGE))
 
 print(paste("Found",nrow(r),"figures in",length(filelist.tex),"TeX files."))
 print(paste("Output is saved in file: ",file.path(path.source, OUTPUT.IMAGE)))
+
+# find all the R files
+filelist.R = dir(path.source, pattern = '\\.[rR]$', recursive = TRUE)
+path.source = '/Users/gredigcsulb/Dropbox/Research-Nguyen'
+gsub('\\"','',r$image)
+
+
+file.ggsave = c()
+file.source = c()
+for(f in filelist.R) {
+  d = readLines(file.path(path.source,f))
+  n = grep('ggsave', gsub('(.*)\\#.*','\\1',d))
+  if (length(n)>0) {
+    # get first parameter of ggsave
+    s = gsub('.*ggsave\\((.*)\\)','\\1',d[n])
+    for(s1 in s) {
+      g = gsub('\\"','',getCommaSepArgs(s1)[[1]])
+      if(length(g)>0) {
+      file.source = c(file.source,f)
+      file.ggsave = c(file.ggsave, g)
+      } else {print(s1)}
+    }
+  }
+}
+
+r1 = data.frame(
+  filename = file.source,
+  image = file.ggsave
+)
+write.csv(r1, file = file.path(path.source, OUTPUT.IMAGE2))
+print(file.path(path.source, OUTPUT.IMAGE2))
