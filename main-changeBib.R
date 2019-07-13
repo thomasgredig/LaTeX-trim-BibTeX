@@ -11,8 +11,12 @@ library(stringr)
 for(q1 in dir('R', pattern='[^(main)].*\\.R$')) {  source(file.path('R',q1)) }
 
 # find all the bib IDs
-filename = file.path(path.source, input.file)  # CHANGE: need to change this to get.TexFile()
-bibIDs = get.AllReferncesFromTeX(filename)
+tex.list = get.TexFile(path.source)
+bibIDs = NULL
+for(input.file in tex.list) {
+  filename = file.path(path.source, input.file)  
+  bibIDs = c(bibIDs,get.AllReferncesFromTeX(filename))
+}
 unique(bibIDs)
 
 # load the BIBLIOGRAPHY and match
