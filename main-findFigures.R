@@ -9,8 +9,9 @@
 
 ######## configuration, overwrite in myConfig.R #########
 path.source = '.'
-OUTPUT.IMAGE = 'figure-summary.csv'
-OUTPUT.IMAGE2 = 'figure-summary2.csv'
+path.source.R = '.'
+OUTPUT.IMAGE = 'figure-summary-TeX.csv'
+OUTPUT.IMAGE2 = 'figure-summary-R.csv'
 #########################################################
 
 # load all functions, except main.R
@@ -75,15 +76,12 @@ print(paste("Found",nrow(r),"figures in",length(filelist.tex),"TeX files."))
 print(paste("Output is saved in file: ",file.path(path.source, OUTPUT.IMAGE)))
 
 # find all the R files
-filelist.R = dir(path.source, pattern = '\\.[rR]$', recursive = TRUE)
-path.source = '/Users/gredigcsulb/Dropbox/Research-Nguyen'
-gsub('\\"','',r$image)
-
+filelist.R = dir(path.source.R, pattern = '\\.[rR]$', recursive = TRUE)
 
 file.ggsave = c()
 file.source = c()
 for(f in filelist.R) {
-  d = readLines(file.path(path.source,f))
+  d = readLines(file.path(path.source.R,f))
   n = grep('ggsave', gsub('(.*)\\#.*','\\1',d))
   if (length(n)>0) {
     # get first parameter of ggsave
