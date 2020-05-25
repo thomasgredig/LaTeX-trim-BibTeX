@@ -96,8 +96,63 @@ for(j in 1:nrow(d)) {
 # mj = bGeoCode(d$name[1], api.bing)
 # write.csv(d,'~/Downloads/OpticalLimiting.csv')
 
+# make a map
+
 d= read.csv('~/Downloads/OpticalLimiting.csv')
-d1 = subset(d, lng< -10 & lat > 10)
+d$LON = d$lat
+d$LAT = d$lng
+d1 = subset(d, LAT> -50)
 my.maps = c("terrain", "terrain-background", "satellite", "roadmap", "hybrid", "terrain", "watercolor",  "toner" )
-sbbox <- make_bbox(lon = d1$lng, lat = d1$lat, f = 0.1)
-us_map <- get_map(location = sbbox, maptype = my.maps[1], source = "osm", zoom=1)
+sbbox <- make_bbox(lon = d1$LON, lat = d1$LAT, f = 0.1)
+us_map <- get_map(location = sbbox, maptype = my.maps[3], source = "osm")
+library(ggthemes)
+ggmap(us_map, alpha=0.1) +
+  geom_point(data = d1, aes(x = LON, y=LAT),
+             col='red') +
+  ggtitle('Publications on Optical Limiting') +
+  theme_economist() +
+  theme(      panel.grid.major=element_blank(),
+              panel.grid.minor=element_blank(),
+              legend.title = element_blank(),
+              axis.text.x=element_blank(),
+              axis.text.y=element_blank(),
+              axis.ticks=element_blank(),
+              axis.title.x=element_blank(),
+              axis.title.y=element_blank())
+
+ggplot(d1, aes(LON, LAT)) + 
+  geom_point() + 
+  theme_bw()
+
+# Create the map
+q2 = data.frame(
+  long = d1$LON,
+  lat = d1$LAT,
+  group = 1
+)
+w_map <- map_data("world")
+ggplot(w_map, aes(long, lat, group = group)) +
+  geom_polygon(fill='grey80', color = "lightblue") +
+  geom_point(data = q2, size=2, col='red') +
+  ggtitle('Publications on Optical Limiting and Phthalocyanine',
+        subtitle = 'Data Source: Gredig Lab, May 2020') +
+  theme_economist()  +
+  scale_y_continuous(limits = c(-55,90)) +
+  theme(legend.position="bottom") +
+  guides(col=guide_legend(nrow=2)) +
+  theme(      panel.grid.major=element_blank(),
+              panel.grid.minor=element_blank(),
+              legend.title = element_blank(),
+              axis.text.x=element_blank(),
+              axis.text.y=element_blank(),
+              axis.ticks=element_blank(),
+              axis.title.x=element_blank(),
+              axis.title.y=element_blank(),
+              legend.key.size=unit(1,"point"))
+ggsave('OpticalLimitingMap.png', width=9, height=6, dpi=300)
+
+k.us= which(d$country=='USA')
+d[k.us,]
+
+
+             
