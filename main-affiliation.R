@@ -40,6 +40,25 @@ d = data.frame(
   name = univ,
   country = gsub('\\.$','',sapply(strsplit(univ,'\\s'),tail,1))
 )
-d$zip = gsub('.*[A-Z]{2}\\s{1}(\\d{5}).*','\\1',d$name)
+d$zip = as.character(gsub('.*[- ](\\d{3,5}).*','\\1',d$name))
+length(which(is.na(d$zip)==TRUE))
+d[which(is.na(d$zip)==TRUE),]
 d$state = gsub('.*([A-Z]{2})\\s{1}\\d{5}.*','\\1',d$name)
+d$state[which(nchar(d$state)>2)]=''
+
+
+# now find all the latitudes and longitudes
+k1 = which(d$country=='USA')
+zips = d$zip[k1]
+d$lat = NA
+d$lng = NA
+d$city = NA
+for(zp in unique(zips)) {
+  m = GNpostalCodeSearch(postalcode=zp,country="USA")
+  k2 = which(d$zip==zp)
+  d$lat[k2] = m$lat
+  d$lng[k2] = m$lng
+  d$city[k2] = m$placeName
+}
+
 write.csv(d, file='~/Downloads/univ.csv', row.names = FALSE)
