@@ -7,7 +7,7 @@
 ######################
 
 source('config.R') # can be overwritten by myConfig.R
-file.bibtex = '~/Downloads/test.bib'
+file.bibtex = '~/Downloads/OpticalLimiting.bib'
 
 # load the file with the full BibTeX record:
 bibs = get.BibData(file.bibtex)
@@ -16,9 +16,12 @@ print(paste('Found ',length(bibs),'bibliography items.'))
 # extract all the keys from each bib item
 n = lapply(bibs, FUN = get.KeyItemList)
 sapply(n, nrow)
+k1 = which(sapply(n, nrow)==0)
+n[[k1]] <- NULL
 
 # get the affiliations for each entry
 n1 = sapply(n, FUN=function(x) { x[which(x$name=='Affiliation'),'item'] })
+str(n1)
 n1 = as.character(levels(n1)[n1])
 # some papers have several affiliations, so split
 n2 = strsplit(n1,'\\s{4}')
@@ -26,6 +29,11 @@ n2 = strsplit(n1,'\\s{4}')
 n3 = lapply(n2, function(x) { sapply(strsplit(x, ';') ,tail,1) })
 # remove last author, and only get affiliation
 univ.list = lapply(n3, function(x) { gsub('.*?,.*?,\\s*?(.*)','\\1',x) } )
-write.csv(unlist(univ.list), file='univ.csv', row.names = FALSE)
+write.csv(unlist(univ.list), file='~/Downloads/univ.csv', row.names = FALSE)
 
+univ = unlist(univ.list)
+univ[grep('USA',univ)]
 
+library(geonames)
+options(geonamesUsername="tiger7g")
+GNcountryInfo('Switzerland')
