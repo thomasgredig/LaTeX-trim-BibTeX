@@ -16,6 +16,13 @@ Run `main.R`.
 The `main-findFigures.R` utility runs through `path.source` and finds all TeX files, then searches for figures and creates an output file with the file location path. The output file is stored in the `path.source` folder.
 
 
+## Affiliations
+
+Make sure to export the *full record* for BibTeX. Then finding the affiliations goes as follows:
+
+Run `main-affiliation.R`, which uses the `get.KeyItemList.R` function.
+
+
 ## To Do
 
 Run through all AUX files, currently only searches main.aux.
